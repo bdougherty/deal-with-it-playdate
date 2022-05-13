@@ -1,0 +1,6 @@
+name=Deal With It
+author=Brad Dougherty
+description=Deal With It
+bundleID=is.brad.deal-with-it
+version=1.0.0
+imagePath=assets/card.png
