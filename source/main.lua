@@ -6,7 +6,7 @@ import "CoreLibs/crank"
 
 local gfx <const> = playdate.graphics
 
-local maxGlasses = 68
+local maxGlassesY = 68
 local reminderDelay = 3000
 local crankIndicatorStarted = false
 local hasMovedCrank = false
@@ -42,15 +42,29 @@ function playdate.cranked()
 	hasMovedCrank = true
 end
 
+function playdate.upButtonDown()
+	hasMovedCrank = true
+end
+
+function playdate.downButtonDown()
+	hasMovedCrank = true
+end
+
 function playdate.update()
 	local ticks = playdate.getCrankTicks(12)
+	local glassesDeltaY = 0
 
-	if ticks ~= 0 then
-		local newY = math.max(glasses.y + ticks * 2, 0 - glasses.height)
-		glasses:moveTo(glasses.x, math.min(newY, maxGlasses))
+	if playdate.buttonIsPressed(playdate.kButtonUp) then
+		glassesDeltaY = -2
+	elseif playdate.buttonIsPressed(playdate.kButtonDown) then
+		glassesDeltaY = 2
+	elseif ticks ~= 0 then
+		glassesDeltaY = ticks * 2
 	end
 
-	if glasses.y >= maxGlasses then
+	local glassesNewY = math.max(glasses.y + glassesDeltaY, 0 - glasses.height)
+	glasses:moveTo(glasses.x, math.min(glassesNewY, maxGlassesY))
+	if glasses.y >= maxGlassesY then
 		dealWithIt:setVisible(true)
 	else
 		dealWithIt:setVisible(false)
